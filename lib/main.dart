@@ -119,9 +119,9 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener, WidgetsBin
   Future<void> _initWindow() async {
     await windowManager.setPreventClose(true);
 
-    final opt = const WindowOptions(
+    const opt = WindowOptions(
       size: Size(400, 700),
-      center: null,
+      center: true,
       skipTaskbar: false,
       titleBarStyle: TitleBarStyle.normal,
     );
