@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() {
+import 'package:flutter/material.dart';
+import "package:window_manager/window_manager.dart";
+
+Future<void> main() async {
+  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+    await windowManager.ensureInitialized();
+  }
   runApp(const MyApp());
 }
 
@@ -54,8 +60,73 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WindowListener, WidgetsBindingObserver {
+  final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
   int _counter = 0;
+  @override
+  void initState() {
+    if (isDesktop) {
+      WidgetsBinding.instance.addObserver(this);
+      windowManager.addListener(this);
+
+    super.initState();
+  }
+  }
+
+  @override
+  void dispose() {
+    if (isDesktop) {
+      WidgetsBinding.instance.removeObserver(this);
+      windowManager.removeListener(this);
+    }
+    super.dispose();
+  }
+
+  @override
+  Future<void> onWindowClose() async {
+    if (!isDesktop) return;
+
+    final isPreventClose = await windowManager.isPreventClose();
+    if (isPreventClose) {
+      try {
+        print("close");
+      } catch (e) {
+         print(e);
+      } finally {
+        await windowManager.destroy();
+      }
+    }
+  }
+
+  @override
+  Future<void> didChangePlatformBrightness() async {
+    super.didChangePlatformBrightness();
+    if (!isDesktop) return;
+
+    final brightness =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness;
+
+    /// Set up window brightness follow system theme mode.
+    await WindowManager.instance.setBrightness(brightness);
+    await WindowManager.instance.setTitleBarStyle(TitleBarStyle.normal);
+  }
+
+  Future<void> _initWindow() async {
+    await windowManager.setPreventClose(true);
+
+    final opt = const WindowOptions(
+      size: Size(400, 700),
+      center: null,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+    );
+
+
+    await windowManager.waitUntilReadyToShow(opt, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
 
   void _incrementCounter() {
     setState(() {
