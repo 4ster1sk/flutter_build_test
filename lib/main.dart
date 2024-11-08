@@ -68,6 +68,10 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener, WidgetsBin
     if (isDesktop) {
       WidgetsBinding.instance.addObserver(this);
       windowManager.addListener(this);
+      Future.microtask(() async {
+        await _initWindow();
+      });
+      
 
     super.initState();
   }
