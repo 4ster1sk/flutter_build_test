@@ -98,7 +98,8 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener, WidgetsBin
       } catch (e) {
          print(e);
       } finally {
-        await windowManager.destroy();
+        await windowManager.setPreventClose(false);
+        await windowManager.close();
       }
     }
   }
