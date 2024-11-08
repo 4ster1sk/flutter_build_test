@@ -47,10 +47,11 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "flutter_build_test");
   }
 
-  gtk_window_set_default_size(window, 1280, 720);
+  g_autoptr(FlDartProject) project = fl_dart_project_new();
+  gtk_window_set_icon_from_file(window, g_strconcat(fl_dart_project_get_assets_path(project), "/assets/images/icon.png", NULL), NULL);
+  gtk_window_set_default_size(window, 400, 700);
   gtk_widget_show(GTK_WIDGET(window));
 
-  g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(project, self->dart_entrypoint_arguments);
 
   FlView* view = fl_view_new(project);
@@ -58,6 +59,7 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+  gtk_widget_hide(GTK_WIDGET(window));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }

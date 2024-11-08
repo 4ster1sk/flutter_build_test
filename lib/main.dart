@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import "package:window_manager/window_manager.dart";
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
     await windowManager.ensureInitialized();
   }
