@@ -38,13 +38,38 @@ jobs:
         run: |
           flutter build windows --release
 
+      - name: Delete unnecessary DLL
+        run: |
+          rm build\windows\x64\runner\Release\api-ms-*.dll
+
+      - name: Get translation files for Inno Setup
+        run: |
+          curl -o ${{ env.builddir }}\ChineseSimplified.isl https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl
+
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
+        with:
+          path: windows/innosetup.iss
+          options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}" /Qp
+
+      - name: Rename .EXE Installer
+        run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe
+
       - name: Compress files
         run: |
-          ren build\windows\x64\runner\Release flutter_test
-          Compress-Archive -Path build\windows\x64\runner\flutter_test -DestinationPath flutter_test_${env:version}_windows-x64.zip -Force
+          ren build\windows\x64\runner\Release Miria
+          Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath test${env:version}_windows-x64.zip -Force
+
+      - name: VirusTotal Scan
+        uses: crazy-max/ghaction-virustotal@v4
+        with:
+          vt_api_key: ${{ secrets.VT_API_KEY }}
+          files: |
+            test${{env.version}}_windows-x64.zip 
+            miria-installer_${{env.version}}_x64.exe
 
       - name: Create tag and release note
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload v${env:version} --clobber flutter_test_${env:version}_windows-x64.zip
+          gh release upload v${env:version}  test${env:version}_windows-x64.zip miria-installer_${env:version}_x64.exe
