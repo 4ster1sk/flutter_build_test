@@ -22,7 +22,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 CloseApplications=yes
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile={#MyWorkDir}\LICENSE
+;LicenseFile={#MyWorkDir}\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
