@@ -3,9 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  flutter_secure_storage_windows
   media_kit_libs_windows_video
   media_kit_video
-  screen_retriever_windows
+  permission_handler_windows
+  screen_retriever
+  share_plus
+  url_launcher_windows
   window_manager
 )
 
