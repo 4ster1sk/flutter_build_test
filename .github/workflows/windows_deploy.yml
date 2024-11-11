@@ -53,12 +53,12 @@ jobs:
           options: /dMyAppVersion="${{ env.version }}" /dMyWorkDir="${{ env.builddir }}" /Qp
 
       - name: Rename .EXE Installer
-        run:  mv miria-installer.exe miria-installer_${env:version}_x64.exe
+        run:  mv flutter_build_test-installer.exe flutter_build_test-installer_${env:version}_x64.exe
 
       - name: Compress files
         run: |
-          ren build\windows\x64\runner\Release Miria
-          Compress-Archive -Path build\windows\x64\runner\Miria -DestinationPath test${env:version}_windows-x64.zip -Force
+          ren build\windows\x64\runner\Release flutter_build_test
+          Compress-Archive -Path build\windows\x64\runner\flutter_build_test -DestinationPath test${env:version}_windows-x64.zip -Force
 
       - name: VirusTotal Scan
         uses: crazy-max/ghaction-virustotal@v4
@@ -66,10 +66,10 @@ jobs:
           vt_api_key: ${{ secrets.VT_API_KEY }}
           files: |
             test${{env.version}}_windows-x64.zip 
-            miria-installer_${{env.version}}_x64.exe
+            flutter_build_test-installer_${{env.version}}_x64.exe
 
       - name: Create tag and release note
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload v${env:version}  test${env:version}_windows-x64.zip miria-installer_${env:version}_x64.exe
+          gh release upload v${env:version}  test${env:version}_windows-x64.zip flutter_build_test-installer_${env:version}_x64.exe
