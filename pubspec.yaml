@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
   window_manager: ^0.4.3
+  media_kit: ^1.1.11
+  media_kit_video: ^1.2.5
+  media_kit_libs_video: ^1.0.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -48,6 +51,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  media_kit:
+    git:
+      url: https://github.com/4ster1sk/media-kit.git
+      ref: 28292926cfd1e75611f7dcf39248124197d131cf
+      path: ./media_kit/
+  media_kit_video:
+    git:
+      url: https://github.com/4ster1sk/media-kit.git
+      ref: 28292926cfd1e75611f7dcf39248124197d131cf
+      path: ./media_kit_video/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
